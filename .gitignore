@@ -176,3 +176,5 @@ cython_debug/
 poetry.lock
 
 pyproject.toml
+
+.DS_Store
