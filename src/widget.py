@@ -1,8 +1,9 @@
 from src.masks import get_mask_card_number
-from src.masks import  get_mask_account
-from typing import Union
+from src.masks import get_mask_account
 
-def mask_account_card(card: Union[str]) -> Union[str]:
+
+def mask_account_card(card: str) -> str:
+    """функция редактирования данных карты или счета"""
     card = str(card)
     card_list = card.split(" ")
     result_list = []
@@ -18,16 +19,18 @@ def mask_account_card(card: Union[str]) -> Union[str]:
             result_list.append(i)
     result = " ".join(result_list)
     return result
-def get_date(date: Union[str]) -> Union[str]:
+
+
+def get_date(date: str) -> str:
+    """функция редактирования даты"""
     result_list = []
     for i in range(len(date)):
         if date[i] != "T":
             result_list.append(date[i])
         else:
             break
-    result_strinr = ''.join(result_list)
+    result_strinr = "".join(result_list)
     result_list = result_strinr.split("-")
     reversed_result_list = result_list[::-1]
     result = ".".join(reversed_result_list)
     return result
-
