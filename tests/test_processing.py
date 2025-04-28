@@ -9,5 +9,4 @@ data_list = [{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.
 print(filter_by_state(data_list))
 print(filter_by_state(data_list, state='CANCELED'))
 print(sort_by_date(data_list))
-print(sort_by_date(data_list,reverse=False))
-
+print(sort_by_date(data_list, reverse=False))
