@@ -38,7 +38,7 @@ def get_date(date: str) -> str:
     """функция редактирования даты"""
     result_list = []
     if len(date) == 0:
-        return"Время не введено"
+        return "Время не введено"
     for i in range(len(date)):
         if date[i] != "T":
             result_list.append(date[i])
