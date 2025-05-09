@@ -4,6 +4,8 @@ from typing import Union
 def get_mask_card_number(number_card: Union[str, int]) -> Union[str]:
     """маскируем номер карты пользователя"""
     number_card = str(number_card)
+    if len(number_card) == 0:
+        return "Номер карты не введен"
     if len(number_card) < 16:
         return "Вы ввели недостаточно символов"
     elif len(number_card) > 16:
@@ -26,6 +28,8 @@ def get_mask_account(number_account: Union[str, int]) -> Union[str]:
     """Маскируем номер счета пользователя"""
 
     number_account = str(number_account)
+    if len(number_account) == 0:
+        return "Номер счета не введен"
     if len(number_account) < 20:
         return "Вы ввели недостаточно символов"
     elif len(number_account) > 20:
