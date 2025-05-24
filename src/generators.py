@@ -23,14 +23,14 @@ def transaction_descriptions(transaction_data: list):
         yield i["description"]
 
 
-def card_number_generator(begin: int, end: int = None):
+def card_number_generator(start: int, stop: int = None):
     """Генерирует номера карт в заданном интервале"""
-    if end is None:
-        end = begin
+    if stop is None:
+        stop = start
     card_numbers = []
     result = []
-    i = begin
-    while i <= end:
+    i = start
+    while i <= stop:
         i = str(i)
         while len(i) + len(card_numbers) != 16:
             card_numbers.append("0")
