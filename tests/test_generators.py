@@ -1,6 +1,7 @@
 from src.generators import filter_by_currency
 from src.generators import transaction_descriptions
 from src.generators import card_number_generator
+import pytest
 
 
 transactions = [
@@ -113,26 +114,19 @@ def test_filter_by_currency():
     assert next(result_5) == expected_5
 
 
-def test_transaction_descriptions():
-    expected_1 = "Перевод организации"
-    expected_2 = "Перевод со счета на счет"
-    expected_3 = "Перевод со счета на счет"
-    expected_4 = "Нет входных данных"
-    result = transaction_descriptions(transactions)
-    result_4 = transaction_descriptions([])
-    assert next(result) == expected_1
-    assert next(result) == expected_2
-    assert next(result) == expected_3
-    assert next(result_4) == expected_4
+@pytest.mark.parametrize("x,expected", [(transactions,["Перевод организации",
+                                                       "Перевод со счета на счет","Перевод со счета на счет"])])
+def test_transaction_descriptions(x, expected):
+    result = []
+    descriptions = transaction_descriptions(x)
+    for _ in range(3):
+        result.append(next(descriptions))
+    assert result == expected
+    assert next(transaction_descriptions([])) == "Нет входных данных"
 
 
-def test_card_number_generator():
-    expected_1 = ["0000 0000 0000 0001"]
-    expected_2 = ["0000 0000 0000 0007"]
-    expected_3 = ["0000 0000 0012 3456", "0000 0000 0012 3457", "0000 0000 0012 3458"]
-    result = card_number_generator(1)
-    result_2 = card_number_generator(7)
-    result_3 = card_number_generator(123456, 123458)
-    assert next(result) == expected_1
-    assert next(result_2) == expected_2
-    assert next(result_3) == expected_3
+@pytest.mark.parametrize("x,y,expected", [(1,None,["0000 0000 0000 0001"]),(7,None,["0000 0000 0000 0007"]),
+                                    (123456,123458,
+                                     ["0000 0000 0012 3456", "0000 0000 0012 3457", "0000 0000 0012 3458"])])
+def test_card_number_generator(x,y, expected):
+    assert next(card_number_generator(x,y)) == expected
