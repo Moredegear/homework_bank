@@ -114,8 +114,8 @@ def test_filter_by_currency():
     assert next(result_5) == expected_5
 
 
-@pytest.mark.parametrize("x,expected", [(transactions,["Перевод организации",
-                                                       "Перевод со счета на счет","Перевод со счета на счет"])])
+@pytest.mark.parametrize("x, expected", [(transactions, ["Перевод организации", "Перевод со счета на счет",
+                                                         "Перевод со счета на счет"])])
 def test_transaction_descriptions(x, expected):
     result = []
     descriptions = transaction_descriptions(x)
@@ -125,8 +125,8 @@ def test_transaction_descriptions(x, expected):
     assert next(transaction_descriptions([])) == "Нет входных данных"
 
 
-@pytest.mark.parametrize("x,y,expected", [(1,None,["0000 0000 0000 0001"]),(7,None,["0000 0000 0000 0007"]),
-                                    (123456,123458,
-                                     ["0000 0000 0012 3456", "0000 0000 0012 3457", "0000 0000 0012 3458"])])
-def test_card_number_generator(x,y, expected):
-    assert next(card_number_generator(x,y)) == expected
+@pytest.mark.parametrize("x,y,expected", [(1, None, ["0000 0000 0000 0001"]), (7, None, ["0000 0000 0000 0007"]),
+                                          (123456, 123458,
+                                          ["0000 0000 0012 3456", "0000 0000 0012 3457", "0000 0000 0012 3458"])])
+def test_card_number_generator(x, y, expected):
+    assert next(card_number_generator(x, y)) == expected
