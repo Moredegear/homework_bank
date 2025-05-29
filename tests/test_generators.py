@@ -72,9 +72,15 @@ transactions_fixc = [
     },
 ]
 
-
-def test_filter_by_currency():
-    expected_1 = {
+@pytest.fixture
+def currency():
+    return transactions
+def test_filter_by_currency_2(currency):
+    result = []
+    data =filter_by_currency(currency)
+    for _ in range(2):
+        result.append(next(data))
+    assert result == [{
         "id": 939719570,
         "state": "EXECUTED",
         "date": "2018-06-30T02:08:58.425572",
@@ -82,8 +88,8 @@ def test_filter_by_currency():
         "description": "Перевод организации",
         "from": "Счет 75106830613657916952",
         "to": "Счет 11776614605963066702",
-    }
-    expected_2 = {
+    },
+        {
         "id": 142264268,
         "state": "EXECUTED",
         "date": "2019-04-04T23:20:05.206878",
@@ -91,8 +97,10 @@ def test_filter_by_currency():
         "description": "Перевод со счета на счет",
         "from": "Счет 19708645243227258542",
         "to": "Счет 75651667383060284188",
-    }
-    expected_3 = {
+    }]
+    assert next(filter_by_currency(currency,currency="EUR")) == "Нет транзакций в заданной валюте"
+    assert next(filter_by_currency([])) == "Нет вводных данных"
+    assert next(filter_by_currency(currency, currency="RUB")) == {
         "id": 873106923,
         "state": "EXECUTED",
         "date": "2019-03-23T01:09:46.296404",
@@ -101,17 +109,6 @@ def test_filter_by_currency():
         "from": "Счет 44812258784861134719",
         "to": "Счет 74489636417521191160",
     }
-    expected_4 = "Нет вводных данных"
-    expected_5 = "Нет транзакций в заданной валюте"
-    result = filter_by_currency(transactions)
-    result_3 = filter_by_currency(transactions, currency="RUB")
-    result_4 = filter_by_currency([])
-    result_5 = filter_by_currency(transactions_fixc)
-    assert next(result) == expected_1
-    assert next(result) == expected_2
-    assert next(result_3) == expected_3
-    assert next(result_4) == expected_4
-    assert next(result_5) == expected_5
 
 
 @pytest.mark.parametrize("x, expected", [(transactions, ["Перевод организации", "Перевод со счета на счет",
