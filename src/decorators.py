@@ -3,6 +3,7 @@ from functools import wraps
 
 def log(filename=None):
     """декоратор проверяющий работу функции и записывающий результат в указаный файл или консоль"""
+
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -20,7 +21,6 @@ def log(filename=None):
                     with open(filename, "w") as file:
                         file.write(d)
 
-
         return wrapper
 
     return decorator
@@ -29,6 +29,7 @@ def log(filename=None):
 @log(filename="mylog.txt")
 def my_function(error):
     raise Exception(error)
+
 
 @log()
 def my_function_1(error):
