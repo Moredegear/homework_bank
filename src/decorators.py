@@ -9,17 +9,17 @@ def log(filename=None):
         def wrapper(*args, **kwargs):
             try:
                 result = func(*args, **kwargs)
-                d = f"{func.__name__}: ок"
-                return result, d
+                message = f"{func.__name__}: ок\n"
+                return result
             except Exception as e:
-                d = f"{func.__name__} error: {e}. Inputs: {args}, {kwargs}"
-                return d
+                message = f"{func.__name__} error: {e}. Inputs: {args}, {kwargs}\n"
+                return e
             finally:
                 if filename is None:
-                    print(d)
+                    print(message)
                 else:
-                    with open(filename, "w") as file:
-                        file.write(d)
+                    with open(filename, "a") as file:
+                        file.write(message)
 
         return wrapper
 
