@@ -8,16 +8,18 @@ def log(filename=None):
         def wrapper(*args, **kwargs):
             try:
                 result = func(*args, **kwargs)
+                d = f"{func.__name__}: ок"
+                return result, d
+            except Exception as e:
+                d = f"{func.__name__} error: {e}. Inputs: {args}, {kwargs}"
+                return d
+            finally:
                 if filename is None:
-                    print(f"{func.__name__}: ок")
-                    return result
+                    print(d)
                 else:
                     with open(filename, "w") as file:
-                        file.write(f"{func.__name__}: ок")
-                return result
-            except Exception as e:
-                print(f"{func.__name__} error: {e}. Inputs: {args}, {kwargs}")
-                return e
+                        file.write(d)
+
 
         return wrapper
 
@@ -28,12 +30,16 @@ def log(filename=None):
 def my_function(error):
     raise Exception(error)
 
+@log()
+def my_function_1(error):
+    raise Exception(error)
+
 
 @log()
 def example_function(x, y):
     return x + y
 
 
-@log(filename="mylog.txt")
+@log(filename="mylog_1.txt")
 def example_function_1(x, y):
     return x - y
