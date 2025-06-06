@@ -1,28 +1,42 @@
-from src.decorators import my_function
-from src.decorators import example_function
-from src.decorators import example_function_1
-from src.decorators import my_function_1
+import pytest
+from src.decorators import log
 
 
-def test_log(capsys):
-    """проверяем вывод на консоль успешной операции и ошибочной"""
-    my_function_1("division by zero")
-    captured = capsys.readouterr()
-    assert captured.out == "my_function_1 error: division by zero. Inputs: ('division by zero',), {}\n\n"
-    example_function(1, 2)
-    captured = capsys.readouterr()
-    assert captured.out == "example_function: ок\n\n"
+def func_for_test(x, y):
+    """Функция для тестирования декоратора"""
+    return x + y
 
 
-def test_log2():
-    """проверяем вывод в файл сообщения об ошибке"""
-    my_function("error text")
-    expected = open("mylog.txt", "r", encoding="utf-8").readline(90)
-    assert expected == "my_function error: error text. Inputs: ('error text',), {}\n"
+def test_success_console(capsys):
+    decorated_func = log()(func_for_test)
+
+    result = decorated_func(1, 2)
+
+    assert result == 3
+    assert capsys.readouterr().out == "func_for_test: ок\n"
 
 
-def test_log3():
-    """проверяем вывод в файл сообщения об успехе"""
-    example_function_1(1, 2)
-    expected = open("mylog_1.txt", "r", encoding="utf-8").readline()
-    assert expected == "example_function_1: ок\n"
+def test_error_console(capsys):
+    decorated_func = log()(func_for_test)
+
+    with pytest.raises(TypeError) as e:
+        decorated_func(1, y="2")
+        assert capsys.readouterr().out == f"func_for_test error: {e}. Inputs: (1,), {'y': '2'}\n"
+
+
+def test_success_file(tmp_path):
+    log_file = tmp_path / "test.log"
+    decorated_func = log(filename=log_file)(func_for_test)
+
+    result = decorated_func(1, 2)
+
+    assert result == 3
+    assert log_file.read_text() == "func_for_test: ок\n"
+
+
+def test_error_file(tmp_path):
+    log_file = tmp_path / "test.log"
+    decorated_func = log(filename=log_file)(func_for_test)
+    with pytest.raises(TypeError) as e:
+        decorated_func(1, y="2")
+        assert log_file.read_text() == f"func_for_test error: {e}. Inputs: (1,), {'y': '2'}\n"
