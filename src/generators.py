@@ -1,5 +1,3 @@
-
-
 def filter_by_currency(transaction_data: list, currency: str = "USD"):
     """фильтрует и выдает транзакции по заданной валюте"""
     if len(transaction_data) == 0:
@@ -40,10 +38,11 @@ def card_number_generator(start: int, stop: int = None):
         card_numbers.insert(9, " ")
         card_numbers.insert(14, " ")
 
-        result.append(''.join(card_numbers))
+        result.append("".join(card_numbers))
         card_numbers = []
         i = int(i) + 1
     yield result
+
 
 transactions = [
     {

@@ -63,24 +63,26 @@ def test_filter_by_currency_2(currency):
     data = filter_by_currency(currency)
     for _ in range(2):
         result.append(next(data))
-    assert result == [{
-        "id": 939719570,
-        "state": "EXECUTED",
-        "date": "2018-06-30T02:08:58.425572",
-        "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
-        "description": "Перевод организации",
-        "from": "Счет 75106830613657916952",
-        "to": "Счет 11776614605963066702",
-    },
-     {
-     "id": 142264268,
-     "state": "EXECUTED",
-     "date": "2019-04-04T23:20:05.206878",
-     "operationAmount": {"amount": "79114.93", "currency": {"name": "USD", "code": "USD"}},
-     "description": "Перевод со счета на счет",
-     "from": "Счет 19708645243227258542",
-     "to": "Счет 75651667383060284188",
-    }]
+    assert result == [
+        {
+            "id": 939719570,
+            "state": "EXECUTED",
+            "date": "2018-06-30T02:08:58.425572",
+            "operationAmount": {"amount": "9824.07", "currency": {"name": "USD", "code": "USD"}},
+            "description": "Перевод организации",
+            "from": "Счет 75106830613657916952",
+            "to": "Счет 11776614605963066702",
+        },
+        {
+            "id": 142264268,
+            "state": "EXECUTED",
+            "date": "2019-04-04T23:20:05.206878",
+            "operationAmount": {"amount": "79114.93", "currency": {"name": "USD", "code": "USD"}},
+            "description": "Перевод со счета на счет",
+            "from": "Счет 19708645243227258542",
+            "to": "Счет 75651667383060284188",
+        },
+    ]
     assert next(filter_by_currency(currency, currency="EUR")) == "Нет транзакций в заданной валюте"
     assert next(filter_by_currency([])) == "Нет вводных данных"
     assert next(filter_by_currency(currency, currency="RUB")) == {
@@ -94,8 +96,9 @@ def test_filter_by_currency_2(currency):
     }
 
 
-@pytest.mark.parametrize("x, expected", [(transactions, ["Перевод организации", "Перевод со счета на счет",
-                                                         "Перевод со счета на счет"])])
+@pytest.mark.parametrize(
+    "x, expected", [(transactions, ["Перевод организации", "Перевод со счета на счет", "Перевод со счета на счет"])]
+)
 def test_transaction_descriptions(x, expected):
     result = []
     descriptions = transaction_descriptions(x)
@@ -105,8 +108,13 @@ def test_transaction_descriptions(x, expected):
     assert next(transaction_descriptions([])) == "Нет входных данных"
 
 
-@pytest.mark.parametrize("x,y,expected", [(1, None, ["0000 0000 0000 0001"]), (7, None, ["0000 0000 0000 0007"]),
-                                          (123456, 123458,
-                                          ["0000 0000 0012 3456", "0000 0000 0012 3457", "0000 0000 0012 3458"])])
+@pytest.mark.parametrize(
+    "x,y,expected",
+    [
+        (1, None, ["0000 0000 0000 0001"]),
+        (7, None, ["0000 0000 0000 0007"]),
+        (123456, 123458, ["0000 0000 0012 3456", "0000 0000 0012 3457", "0000 0000 0012 3458"]),
+    ],
+)
 def test_card_number_generator(x, y, expected):
     assert next(card_number_generator(x, y)) == expected
