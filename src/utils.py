@@ -3,7 +3,7 @@ from src.external_api import conversion
 import os
 
 
-def get_list_of_transactions(file_path: str):
+def get_list_of_transactions(file_path: str) -> list:
     transactions = []
     if os.path.isfile(file_path):
         if os.stat(file_path).st_size != 0:
@@ -18,8 +18,7 @@ trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/tes
 print(trans)
 
 
-def get_transaction_amount(transaction):
-    result = None
+def get_transaction_amount(transaction: dict) -> float:
     if transaction["operationAmount"]["currency"]["code"] != "RUB":
         result = conversion(
             transaction["operationAmount"]["amount"], transaction["operationAmount"]["currency"]["code"]

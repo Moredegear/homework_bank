@@ -40,10 +40,9 @@ def test_get_list_of_transactions():
 
 @patch("requests.get")
 def test_get_transaction_amount(mock_get):
-    mock_get.return_value.json.return_value = 5
-    assert get_transaction_amount(transaction) == 5
+    mock_get.return_value.json.return_value = 31957.58
+    assert get_transaction_amount(transaction) == 31957.58
     mock_get.assert_called_once_with(
         "https://api.apilayer.com/exchangerates_data/convert",
         headers={"apikey": "rDFLjzn0mZaqeV8ZcFX02iCGLIHZHgMv"},
-        params={"amount": "amount", "from": "RUB", "to": "USD"},
-    )
+        params={"amount": "31957.58", "from": "RUB", "to": "USD"},)
