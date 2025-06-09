@@ -11,7 +11,7 @@ transaction = {
 
 
 def test_get_list_of_transactions():
-    trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/tests/operations.json")
+    trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/data/operations.json")
     assert trans == [
         {
             "id": 441945886,
@@ -32,9 +32,9 @@ def test_get_list_of_transactions():
             "to": "Счет 35383033474447895560",
         },
     ]
-    trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/tests/zero")
+    trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/zero")
     assert trans == []
-    trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/tests/operations_ziro.json")
+    trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/data/operations_ziro.json")
     assert trans == []
 
 

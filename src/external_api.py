@@ -7,6 +7,7 @@ API_KEY = os.getenv("API_KEY")
 
 
 def conversion(amount: float, code: str) -> float:
+    """функция конвертации валют в рубли через запрос API"""
     url = "https://api.apilayer.com/exchangerates_data/convert"
     payload = {"amount": amount, "from": "RUB", "to": code}
     headers = {"apikey": API_KEY}

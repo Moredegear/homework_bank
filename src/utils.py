@@ -4,6 +4,7 @@ import os
 
 
 def get_list_of_transactions(file_path: str) -> list:
+    """функция возвращающая список транзакций принимая путь к json_файлу"""
     transactions = []
     if os.path.isfile(file_path):
         if os.stat(file_path).st_size != 0:
@@ -14,11 +15,8 @@ def get_list_of_transactions(file_path: str) -> list:
     return transactions
 
 
-trans = get_list_of_transactions("/Users/ulialevina/PycharmProjects/homework/tests/operations.json")
-print(trans)
-
-
 def get_transaction_amount(transaction: dict) -> float:
+    """функция принимающая транзакцию и выдающая сумму операции в рублях"""
     if transaction["operationAmount"]["currency"]["code"] != "RUB":
         result = conversion(
             transaction["operationAmount"]["amount"], transaction["operationAmount"]["currency"]["code"]
