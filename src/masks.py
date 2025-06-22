@@ -25,6 +25,13 @@ def get_mask_card_number(number_card: Union[str, int]) -> Union[str]:
         logger.critical("Введено слишком много символов")
         return "Вы ввели слишком много символов"
     logger.info("маскируем номер карты")
+    number_card = str(number_card)
+    if len(number_card) == 0:
+        return "Номер карты не введен"
+    if len(number_card) < 16:
+        return "Вы ввели недостаточно символов"
+    elif len(number_card) > 16:
+        return "Вы ввели слишком много символов"
     mask_card_number_list = []
     for i in range(len(number_card)):
         if i < 6 or i > 11:
@@ -42,7 +49,6 @@ def get_mask_card_number(number_card: Union[str, int]) -> Union[str]:
 
 def get_mask_account(number_account: Union[str, int]) -> Union[str]:
     """Маскируем номер счета пользователя"""
-
     logger.info("принимам номер карты и переводим его в вид строки")
     number_account = str(number_account)
     logger.info("проверяем количество символов")
@@ -56,6 +62,12 @@ def get_mask_account(number_account: Union[str, int]) -> Union[str]:
         logger.critical("Введено слишком много символов")
         return "Вы ввели слишком много символов"
     logger.info("маскируем номер карты")
+    if len(number_account) == 0:
+        return "Номер счета не введен"
+    if len(number_account) < 20:
+        return "Вы ввели недостаточно символов"
+    elif len(number_account) > 20:
+        return "Вы ввели слишком много символов"
     mask_account_list = []
     for i in range(len(number_account)):
         if i > len(number_account) - 5:
