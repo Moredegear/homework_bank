@@ -1,19 +1,82 @@
-from unittest.mock import patch
-from src.reading import reading_csv
-from src.reading import reading_excel
-import os
+from unittest.mock import patch, MagicMock, mock_open
+from src.reading import reading_csv, reading_excel
+import pandas as pd
 
 
-@patch('csv.reader')
-def test_reading_csv(mock_get):
-    mock_get.return_value.csv.return_value = [{'id': '4699552', 'state': 'EXECUTED', 'date': '2022-03-23T08:29:37Z', 'operationAmount': {'amount': '31957.58', 'currency': {'name': 'руб.', 'code': 'USD'}}, 'amount': '23423', 'currency_name': 'Peso', 'currency_code': 'PHP', 'from': 'Discover 7269000803370165', 'to': 'American Express 1963030970727681', 'description': 'Перевод с карты на карту'}]
-    assert reading_csv('/Users/ulialevina/Documents/transactions.csv') ==[{'id': '4699552', 'state': 'EXECUTED', 'date': '2022-03-23T08:29:37Z', 'operationAmount': {'amount': '31957.58', 'currency': {'name': 'руб.', 'code': 'USD'}}, 'amount': '23423', 'currency_name': 'Peso', 'currency_code': 'PHP', 'from': 'Discover 7269000803370165', 'to': 'American Express 1963030970727681', 'description': 'Перевод с карты на карту'}]
-    mock_get.assert_called_once_with()
+@patch("builtins.open", new_callable=mock_open)
+@patch("csv.DictReader")
+def test_get_csv_data(mock_csv_DictReader, mock_file):
+    mock_csv_data = [
+        ['id', 'state', 'date', 'amount', 'currency_name', 'currency_code', 'from', 'to', 'description'],
+        ['650703', 'EXECUTED', '2023-09-05T11:30:32Z', '16210', 'Sol', 'PEN',
+         'Счет 58803664561298323391', 'Счет 39745660563456619397', 'Перевод организации'],
+        ['3598919', 'EXECUTED', '2020-12-06T23:00:58Z', '29740', 'Peso', 'COP',
+         'Discover 3172601889670065', 'Discover 0720428384694643', 'Перевод с карты на карту'],
+        ['593027', 'CANCELED', '2023-07-22T05:02:01Z', '30368', 'Shilling', 'TZS',
+         'Visa 1959232722494097', 'Visa 6804119550473710', 'Перевод с карты на карту']
+    ]
+
+    mock_csv_DictReader.return_value = iter(mock_csv_data)
+
+    with patch.dict('tests.test_utils.transaction', clear=True):
+        result = reading_csv('dummy.csv')
+
+        assert result == [
+            {
+                "id": "650703",
+                "state": "EXECUTED",
+                "date": "2023-09-05T11:30:32Z",
+                "amount": "16210",
+                "currency_name": "Sol",
+                "currency_code": "PEN",
+                "from": "Счет 58803664561298323391",
+                "to": "Счет 39745660563456619397",
+                "description": "Перевод организации",
+            },
+            {
+                "id": "3598919",
+                "state": "EXECUTED",
+                "date": "2020-12-06T23:00:58Z",
+                "amount": "29740",
+                "currency_name": "Peso",
+                "currency_code": "COP",
+                "from": "Discover 3172601889670065",
+                "to": "Discover 0720428384694643",
+                "description": "Перевод с карты на карту",
+            },
+            {
+                "id": "593027",
+                "state": "CANCELED",
+                "date": "2023-07-22T05:02:01Z",
+                "amount": "30368",
+                "currency_name": "Shilling",
+                "currency_code": "TZS",
+                "from": "Visa 1959232722494097",
+                "to": "Visa 6804119550473710",
+                "description": "Перевод с карты на карту",
+            },
+        ]
+
+        mock_file.assert_called_once_with('dummy.csv', 'r', encoding='utf-8')
 
 
-@patch('pandas.read_excel')
-def test_reading_excel(mock_get):
-    mock_get.return_value.pandas.return_volue = [{'id': 650703.0, 'state': 'EXECUTED', 'date': '2023-09-05T11:30:32Z', 'amount': 16210.0, 'currency_name': 'Sol', 'currency_code': 'PEN', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397', 'description': 'Перевод организации'}]
-    assert reading_excel('/Users/ulialevina/Documents/transactions_excel.xlsx') == {'id': 650703.0, 'state': 'EXECUTED', 'date': '2023-09-05T11:30:32Z', 'amount': 16210.0, 'currency_name': 'Sol', 'currency_code': 'PEN', 'from': 'Счет 58803664561298323391', 'to': 'Счет 39745660563456619397', 'description': 'Перевод организации'}
-    mock_get.assert_called_once_with()
+def test_reading_excel():
+    test_data = [{
+        'id': 650703.0,
+        'state': 'EXECUTED',
+        'date': '2023-09-05T11:30:32Z',
+        'amount': 16210.0,
+        'currency_name': 'Sol',
+        'currency_code': 'PEN',
+        'from': 'Счет 58803664561298323391',
+        'to': 'Счет 39745660563456619397',
+        'description': 'Перевод организации'
+    }]
+
+    mock_df = pd.DataFrame(test_data)
+
+    with patch('pandas.read_excel', return_value=mock_df):
+        result = reading_excel('dummy.xlsx')
+
+        assert result == test_data
 

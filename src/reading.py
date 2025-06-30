@@ -1,19 +1,11 @@
 import pandas as pd
 import csv
-import os
-
-from tests.test_utils import transaction
-
 
 def reading_csv(filename):
     result_list = []
     with open(filename) as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=';')
-        key = next(csv_reader)
-        for row in csv_reader:
-            for i in range(len(row)):
-                transaction[key[i]] = row[i]
-            result_list.append(transaction)
+        reader = csv.DictReader(csv_file, delimiter=';')
+        result_list = list(reader)
     return result_list
 
 
@@ -24,13 +16,13 @@ def reading_excel(filename):
 
 
 
-re = reading_csv('/Users/ulialevina/Documents/transactions.csv')
+re = reading_csv('/Users/ulialevina/PycharmProjects/homework/data/transactions.csv')
 for row in re:
     print(row)
     break
 
 
-rt = reading_excel('/Users/ulialevina/Documents/transactions_excel.xlsx')
+rt = reading_excel('/Users/ulialevina/PycharmProjects/homework/data/transactions_excel.xlsx')
 for row in rt:
     print(row)
     break
