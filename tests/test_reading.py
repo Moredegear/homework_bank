@@ -1,4 +1,4 @@
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, mock_open
 from src.reading import reading_csv, reading_excel
 import pandas as pd
 
@@ -79,4 +79,3 @@ def test_reading_excel():
         result = reading_excel('dummy.xlsx')
 
         assert result == test_data
-

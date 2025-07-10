@@ -50,16 +50,20 @@ trans = [
 ]
 
 trwf = 'Перевод организации'
-gsvs = ['Перевод организации','Перевод с карты на карту']
-def search_string(transaction,string):
+gsvs = ['Перевод организации', 'Перевод с карты на карту']
+
+
+def search_string(transaction, string):
+    """функция сортировки по описанию транзакции"""
     result = []
     for i in transaction:
-        if re.search(string, i["description"],flags=re.IGNORECASE):
+        if re.search(string, i["description"], flags=re.IGNORECASE):
             result.append(i)
     return result
 
 
-def process_bank_operations(data:list[dict], categories:list)->dict:
+def process_bank_operations(data: list[dict], categories: list) -> dict:
+    """функция подсчета описаний транзакций"""
     result = defaultdict(int)
     for transaction in data:
         for category in categories:

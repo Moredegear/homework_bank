@@ -2,6 +2,7 @@ import pandas as pd
 import csv
 import os
 
+
 def reading_csv(filename):
     result_list = []
     if os.path.isfile(filename):
@@ -27,7 +28,6 @@ def reading_excel(filename):
     else:
         result_list = None
     return result_list
-
 
 
 re = reading_csv('/Users/ulialevina/PycharmProjects/homework/data/transactions.csv')

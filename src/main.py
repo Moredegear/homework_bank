@@ -8,10 +8,13 @@ from src.reading import reading_excel
 from src.widget import get_date
 from src.widget import mask_account_card
 
+
 def main() -> None:
+    """функция основной логики проекта общение с пользователем"""
     while True:
         data = None
-        answer = input(f"""Привет! Добро пожаловать в программу работы с банковскими транзакциями. Выберите необходимый пункт меню:
+        answer = input("""Привет! Добро пожаловать в программу работы с банковскими транзакциями.
+                   Выберите необходимый пункт меню:
                    1. Получить информацию о транзакциях из JSON-файла
                    2. Получить информацию о транзакциях из CSV-файла
                    3. Получить информацию о транзакциях из XLSX-файла\n""")
@@ -36,7 +39,7 @@ def main() -> None:
     while True:
         if data is None or data == 1 or len(data) == 0:
             break
-        answer = input(f"""Введите статус, по которому необходимо выполнить фильтрацию. 
+        answer = input("""Введите статус, по которому необходимо выполнить фильтрацию.
         Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n""")
         if str(answer).upper() == "EXECUTED":
             print(" Операции отфильтрованы по статусу 'EXECUTED'")
@@ -54,11 +57,11 @@ def main() -> None:
             print(f" Статус операции {answer} недоступен.")
             continue
     while True:
-        if data is None or data == 1 or len(data_status) == 0 :
+        if data is None or data == 1 or len(data_status) == 0:
             break
-        answer = input(f"""Отсортировать операции по дате? Да/Нет\n""")
+        answer = input("""Отсортировать операции по дате? Да/Нет\n""")
         if str(answer).lower() == "да":
-            answer = input(f"""Отсортировать по возрастанию или по убыванию?\n""")
+            answer = input("""Отсортировать по возрастанию или по убыванию?\n""")
             if str(answer).lower() == "по убыванию":
                 data_time = sort_by_date(data_status)
                 break
@@ -75,11 +78,11 @@ def main() -> None:
             print("Данная сортировка не найдена")
             continue
     while True:
-        if data is None or data == 1 or len(data_time) == 0 :
+        if data is None or data == 1 or len(data_time) == 0:
             break
-        answer = input(f"""хотите отсортировать транзакции по валютам?Да/Нет\n""")
+        answer = input("""хотите отсортировать транзакции по валютам?Да/Нет\n""")
         if str(answer).lower() == "да":
-            answer = input(f"""Транзакции в каких валютах вы хотите вывести?\n""")
+            answer = input("""Транзакции в каких валютах вы хотите вывести?\n""")
             answer = answer.upper()
             answer_list = answer.split()
             data_currency = []
@@ -95,9 +98,9 @@ def main() -> None:
             print("Данная сортировка не найдена")
             continue
     while True:
-        if data is None or data == 1 or len(data_currency) == 0 :
+        if data is None or data == 1 or len(data_currency) == 0:
             break
-        answer = input(f"""Отфильтровать список транзакций по определенному слову в описании? Да/Нет\n""")
+        answer = input("""Отфильтровать список транзакций по определенному слову в описании? Да/Нет\n""")
         if str(answer).lower() == "да":
             answer = input("по какoму слову в описании фильтруем?")
             result = search_string(data_currency, answer)
@@ -136,5 +139,6 @@ def main() -> None:
                     print(f'''{get_date(i['date'])} {i['description']}
                 {mask_account_card(i['from'])} -> {mask_account_card(i['to'])}
                 Сумма: {i['operationAmount']['amount']} {i['operationAmount']['currency']['code']}.''')
+
 
 main()
