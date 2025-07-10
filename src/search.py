@@ -1,5 +1,6 @@
 import re
-from collections import defaultdict
+from collections import defaultdict, Counter
+import collections
 
 trans = [
     {
@@ -66,11 +67,12 @@ def search_string(transaction, string):
 
 def process_bank_operations(data: list[dict], categories: list) -> dict:
     """функция подсчета описаний транзакций"""
-    result = defaultdict(int)
+    result_list = []
     if len(categories) == 0:
          return []
     for transaction in data:
         for category in categories:
             if re.search(category, transaction["description"]):
-                result[category] += 1
+                result_list.append(transaction['description'])
+                result = Counter(result_list)
     return result
