@@ -27,8 +27,10 @@ def get_list_of_transactions(file_path: str) -> list:
             logger.debug("извлекаем список транзакций из jsonfile и возвращаем результат")
         else:
             logger.warning("файл пустой возвращаем пустой список")
+            transactions = 1
     else:
         logger.warning("файл не найден возвращаем пустой список")
+        transactions = None
     return transactions
 
 
