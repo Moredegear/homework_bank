@@ -1,7 +1,8 @@
-import re
-from collections import defaultdict
+from src.search import search_string
+from src.search import process_bank_operations
+import pytest
 
-trans = [
+transactions = [
     {
         "id": 939719570,
         "state": "EXECUTED",
@@ -49,28 +50,22 @@ trans = [
     },
 ]
 
-trwf = 'Перевод организации'
-gsvs = ['Перевод организации', 'Перевод с карты на карту']
+@pytest.mark.parametrize("transactions, description, expected",[(transactions, "", []),(transactions, "карты",[{
+        "id": 895315941,
+        "state": "EXECUTED",
+        "date": "2018-08-19T04:27:37.904916",
+        "operationAmount": {"amount": "56883.54", "currency": {"name": "USD", "code": "USD"}},
+        "description": "Перевод с карты на карту",
+        "from": "Visa Classic 6831982476737658",
+        "to": "Visa Platinum 8990922113665229",
+    }])])
+def test_search_string(transactions, description, expected):
+    assert search_string(transactions, description) == expected
 
 
-def search_string(transaction, string):
-    """функция сортировки по описанию транзакции"""
-    result = []
-    if len(string) == 0:
-        return result
-    for i in transaction:
-        if re.search(string, i["description"], flags=re.IGNORECASE):
-            result.append(i)
-    return result
-
-
-def process_bank_operations(data: list[dict], categories: list) -> dict:
-    """функция подсчета описаний транзакций"""
-    result = defaultdict(int)
-    if len(categories) == 0:
-         return []
-    for transaction in data:
-        for category in categories:
-            if re.search(category, transaction["description"]):
-                result[category] += 1
-    return result
+@pytest.mark.parametrize("transactions, description, expected",[(transactions, [], []),(transactions,
+                                                                ["Перевод с карты на карту","Перевод со счета на счет",
+                                                                 "Перевод организации"],{"Перевод с карты на карту":1,
+                                                                "Перевод со счета на счет":2,"Перевод организации":2})])
+def test_process_bank_operations(transactions, description, expected):
+    assert process_bank_operations(transactions,description) == expected
