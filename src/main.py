@@ -20,18 +20,15 @@ def main() -> None:
                    3. Получить информацию о транзакциях из XLSX-файла\n""")
         if str(answer) == "1":
             print("Для обработки выбран JSON-файл.")
-            answer = input("укажите путь к файлу")
-            data = get_list_of_transactions(answer)
+            data = get_list_of_transactions('/Users/ulialevina/PycharmProjects/homework/data/operations.json')
             break
         elif str(answer) == "2":
             print("Для обработки выбран CSV-файл.")
-            answer = input("укажите путь к файлу")
-            data = reading_csv(answer)
+            data = reading_csv("/Users/ulialevina/PycharmProjects/homework/data/transactions.csv")
             break
         elif str(answer) == "3":
             print("Для обработки выбран XLSX-файл.")
-            answer = input("укажите путь к файлу")
-            data = reading_excel(answer)
+            data = reading_excel("Users/ulialevina/PycharmProjects/homework/data/transactions_excel.xlsx")
             break
         else:
             print("данная обработка не доступна")
@@ -121,7 +118,7 @@ def main() -> None:
         print('Распечатываю итоговый список транзакций...')
         print(f'Всего банковских операций в выборке: {len(result)}')
         for i in result:
-            if 'currency_cod' in i:
+            if 'currency_code' in i:
                 if i['from'] == '':
                     print(f'''{get_date(i['date'])} {i["description"]}
                 {mask_account_card(i['to'])}

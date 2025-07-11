@@ -7,7 +7,7 @@ def reading_csv(filename):
     result_list = []
     if os.path.isfile(filename):
         if os.stat(filename).st_size != 0:
-            with open(filename) as csv_file:
+            with open(filename, encoding="utf-8") as csv_file:
                 reader = csv.DictReader(csv_file, delimiter=';')
                 result_list = list(reader)
         else:

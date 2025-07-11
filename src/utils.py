@@ -20,7 +20,7 @@ def get_list_of_transactions(file_path: str) -> list:
         logger.debug("проверяем наличие файла")
         if os.stat(file_path).st_size != 0:
             logger.debug("проверяем наличие содерживого в файле")
-            with open(file_path) as json_file:
+            with open(file_path,encoding="utf-8") as json_file:
                 data = json.load(json_file)
                 for transaction in data:
                     transactions.append(transaction)
